@@ -39,9 +39,6 @@ typ$Job <- " Typology"
 doc <- read.delim("jobs_Documentation.txt", sep = " ")
 doc$Job <- " Documentation"
 
-doc2 <- read.delim("jobs_Lang Document.txt", sep = " ")
-doc2$Job <- " Documentation"
-
 neur <- read.delim("jobs_Neuroling.txt", sep = " ")
 neur$Job <- " Neurolinguistics"
 
