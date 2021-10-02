@@ -11,9 +11,9 @@ areas = ["Syntax","Semantics","Morphology","Phonetics","Phonology","Socio","Prag
 pattern = re.compile('^[0-9]+')
 matching_files = [f for f in os.listdir('emails/') if pattern.match(f)]
 
-#pattern2 = re.compile(' ')
+pattern2 = re.compile(' ')
 #pattern2 = re.compile('Prof(essor)')
-pattern2 = re.compile('Post ?[Dd]oc')
+#pattern2 = re.compile('Post ?[Dd]oc')
 
 for area in areas:
     output_file = open("jobs_" + area + ".txt","w+") 
@@ -29,7 +29,7 @@ for area in areas:
                     input_file = open(path + filename,"r",encoding = "ISO-8859-1")
                     for line in input_file:
                         if "Jobs: " in line:                                    
-                            if ((area.lower() in line.lower()) and (pattern2.match(line))):
+                            if ((area.lower() in line.lower()) and re.search(pattern2,line)):
                                 counter += 1
                     input_file.close()
             output_file.write(str(counter) + " " + month + " " + year + "\n")
