@@ -1,43 +1,32 @@
-# Python code originally written by Tom Juzek (http://tsjuzek.com/blog/jobs_in_linguistics.html)
-# Adapted by Rui Chaves 
-# -*- coding: utf-8 -*-
+# Python2 code originally written by Tom Juzek (http://tsjuzek.com/blog/jobs_in_linguistics.html)
+# Adapted and revised to Python3 by Rui Chaves 
+import re
+import os
+path = 'emails/'
 
-import sys, re, os
-reload(sys)
+month_list = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]   
+year_list = [str(m) for m in range(1997,2022)]
+areas = ["Syntax","Semantics","Morphology","Phonetics","Phonology","Socio","Pragmatics","Comp Ling","Computational","Psycholing","Typology","Documentation", "Neuroling","Historical","Forensic"]
 
-sys.setdefaultencoding('utf-8')
+pattern = re.compile('^[0-9]+')
+matching_files = [f for f in os.listdir('emails/') if pattern.match(f)]
 
-def main():	
-    path = 'emails/'
-    month_list = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-    
-    year_list = map(str,[m for m in range(1997,2021)])
-    areas = ["Syntax","Semantics","Morphology","Phonetics","Phonology","Socio","Pragmatics","Comp Ling","Computational","Psycholing","Typology","Documentation", "Neuroling","Historical","Forensic"]
-
-    for area in areas:
-        output_file = open("jobs_" + area + ".txt","w+") 
-        output_file.write("Jobs Month Year\n")
- 
-        for year  in year_list:
-            for month  in month_list:
-                counter = 0
-                for filename in os.listdir(path):
-                    if "-" in filename:
-                        filename_elements = filename.split("-")                              
-                        email_month = filename_elements[1].split(".")[0]                                    
-                        email_year = filename_elements[0]
-                        if (email_month == month) and (email_year == year):
-                            input_file = open(path + filename, "r")
-                            for line in input_file:						
-                                if "Jobs: " in line:                                    
-				    if (area in line):
-                                        counter += 1
-                            input_file.close()
-		
-                output_file.write(str(counter) + " " + month + " " + year + "\n")
-	
-
-        output_file.close()
-
-# boilerplate
-main()
+for area in areas:
+    output_file = open("jobs_" + area + ".txt","w+") 
+    output_file.write("Jobs Month Year\n")
+    for year in year_list:
+        for month  in month_list:
+            counter = 0
+            for filename in matching_files:                
+                filename_elements = filename.split("-")                              
+                email_month = filename_elements[1].split(".")[0]                                    
+                email_year = filename_elements[0]
+                if (email_month == month) and (email_year == year):
+                    input_file = open(path + filename,"r",encoding = "ISO-8859-1")
+                    for line in input_file:
+                        if "Jobs: " in line:                                    
+                            if (area.lower() in line.lower()):
+                                counter += 1
+                    input_file.close()
+            output_file.write(str(counter) + " " + month + " " + year + "\n")
+    output_file.close()
