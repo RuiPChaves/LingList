@@ -15,8 +15,6 @@ pattern2 = re.compile(r'[pP]rof(essor)?')
 #pattern2 = re.compile(' ')
 ######################################################################
 
-
-
 month_list = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]   
 year_list = [str(m) for m in range(1997,2022)]
 areas = ["Syntax","Semantics","Morphology","Phonetics","Phonology","Socio","Pragmatics","Comp Ling","Computational","Psycholing","Typology","Documentation", "Neuroling","Historical","Forensic"]
@@ -24,9 +22,10 @@ areas = ["Syntax","Semantics","Morphology","Phonetics","Phonology","Socio","Prag
 pattern = re.compile('^[0-9]+')
 matching_files = [f for f in os.listdir('emails/') if pattern.match(f)]
 
+output_file = open("jobs.txt","w+") 
+output_file.write("Jobs,Month,Year,Area\n")
+
 for area in areas:
-    output_file = open("jobs_" + area + ".txt","w+") 
-    output_file.write("Jobs Month Year\n")
     for year in year_list:
         for month  in month_list:
             counter = 0
@@ -41,5 +40,6 @@ for area in areas:
                             if ((area.lower() in line.lower()) and re.search(pattern2,line)):
                                 counter += 1
                     input_file.close()
-            output_file.write(str(counter) + " " + month + " " + year + "\n")
-    output_file.close()
+            output_file.write(str(counter) + "," + month + "," + year + "," + area + "\n")
+
+output_file.close()
