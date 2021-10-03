@@ -6,10 +6,10 @@ path = 'emails/'
 
 ##################### Select your search type ########################
 # Search for 'Professor' jobs
-pattern2 = re.compile('Prof(essor)?')
+pattern2 = re.compile(r'[pP]rof(essor)?')
 
 # Search for 'Postoc' jobs
-#pattern2 = re.compile('Post ?[Dd]oc')
+#pattern2 = re.compile(r'\b[pP]ost ?[Dd]oc')
 
 # Search for any jobs
 #pattern2 = re.compile(' ')
