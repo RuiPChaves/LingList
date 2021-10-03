@@ -18,11 +18,18 @@ j <- j[!(j$Area=="Typology"),]
 
 j$Area <- factor(j$Area) 
 
+
+#########################################################################################
+# Overall jobs by area, regardless of year
+
 jto <- as.data.frame(aggregate(j$Jobs~j$Area, FUN=sum))
 colnames(jto) <- c("Area","Jobs") 
 jto$Area = with(jto, reorder(Area,Jobs,sum))
 
-# Pie plot
+# View table
+jto
+
+# Pie plot 
 ggplot(jto, aes(x="", y=Jobs, fill=Area)) +
   theme_bw(base_size=14) +
   scale_fill_carto_d(name = "Area: ", palette = "Safe") +
@@ -65,7 +72,7 @@ jt$Year <- factor(jt$Year)
   
 
 ##############################################################################
-# Totals, in time
+# Jobs across years, regardless of area
     
 jtt <- as.data.frame(aggregate(j$Jobs~j$Year, FUN=sum))
 colnames(jtt) <- c("Year","Jobs") 
