@@ -1,5 +1,5 @@
 # Python2 code originally written by Tom Juzek (http://tsjuzek.com/blog/jobs_in_linguistics.html)
-# Adapted and revised to Python3 by Rui Chaves 
+# Updated to Python3 and extended by Rui Chaves 
 import re
 import os
 path = 'emails/'
