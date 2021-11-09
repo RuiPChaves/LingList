@@ -7,7 +7,7 @@ Analysis of the LingLite posts at http://listserv.linguistlist.org/pipermail/lin
 
   Most job posts mention multiple specializations (e.g. Phonetics/Phonology, or Syntax/Semantics, or Computational [field]), which means that the jobs tallied here the number of opportunities from applicants' perspective, which are inflated relative to the true number of job positions.
   
-  Python code "script.py" was orginally written by Tom Juzek (http://tsjuzek.com/blog/jobs_in_linguistics.html) for Python 2 (2017), later adapted to Python 3 and expanded by Rui Chaves (2019-2021). By default, the script counts only positions that mention "Professor". To perform other searches, code must be edited. 
+  Python code "script.py" was orginally written by Tom Juzek (http://tsjuzek.com/blog/jobs_in_linguistics.html) for Python 2 (2017), later adapted to Python 3 and expanded by Rui Chaves (2019-2021). By default, the script counts only positions that mention "Professor". To perform other searches, code must be edited (edit line 9). 
   This script is not optimized in any shape or form.
   After running "script.py", a data file "jobs.csv" is generated, which can be plotted via "jobsgraph.r"
 
