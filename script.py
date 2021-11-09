@@ -1,5 +1,5 @@
 # Python2 code originally written by Tom Juzek (http://tsjuzek.com/blog/jobs_in_linguistics.html)
-# Updated to Python3 and extended by Rui Chaves 
+# Adapted and revised to Python3 by Rui Chaves 
 import re
 import os
 path = 'emails/'
@@ -10,19 +10,16 @@ pattern2 = re.compile(r'[pP]rof(essor)?')
 
 # Search for 'Postoc' jobs
 #pattern2 = re.compile(r'\b[pP]ost ?[Dd]oc')
-
-# Search for any jobs
-#pattern2 = re.compile(' ')
 ######################################################################
 
 month_list = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]   
 year_list = [str(m) for m in range(1997,2022)]
-areas = ["Syntax","Semantics","Morphology","Phonetics","Phonology","Socio","Pragmatics","Comp Ling","Computational","Psycholing","Typology","Documentation", "Neuroling","Historical","Forensic"]
+areas = ["Syntax","Semantics","Morphology","Phonetics","Phonology","Socio","Pragmatics","Comp Ling","Computational","Psycholing","Typology","Documentation", "Neuroling","Historical","Forensic","Applied"]
 
 pattern = re.compile('^[0-9]+')
 matching_files = [f for f in os.listdir('emails/') if pattern.match(f)]
 
-output_file = open("jobs.txt","w+") 
+output_file = open("jobs.csv","w+") 
 output_file.write("Jobs,Month,Year,Area\n")
 
 for area in areas:

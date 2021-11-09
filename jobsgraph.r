@@ -5,7 +5,7 @@ library(rcartocolor)
 library(dplyr)
 
 # Load data
-j <- read.delim("jobs.txt", sep = ",")
+j <- read.delim("jobs.csv", sep = ",")
 
 # Normalize area names
 levels(j$Area) <- c("CompLing","CompLing","Documentation","ForensicLing","HistoricalLing","Morphology","Neurolinguistics","Phonetics","Phonology","Pragmatics","Psycholinguistics","Semantics","Sociolinguistics","Syntax","Typology","Applied")
