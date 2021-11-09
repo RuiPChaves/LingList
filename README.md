@@ -7,7 +7,7 @@ To plot and tally LingList posts, download the data at http://listserv.linguistl
   
   This Python code was orginally written by Tom Juzek (http://tsjuzek.com/blog/jobs_in_linguistics.html) for Python 2 (2017), and later adapted to Python 3 and expanded by Rui Chaves (2019-2021). All R code by Rui Chaves. 
   
-  By default, the script counts only positions that mention "Professor". To perform other searches, code must be edited (edit line 9). There are too many categories for colour-blind compatible palletes to handle, and therefore the areas with the least job posts are filtered out in the R file.
+  By default, the script counts only positions that mention "Professor". To perform other searches, the Regular Expression code must be edited (edit line 9). There are too many categories for colour-blind compatible palletes to handle, and therefore the areas with the least job posts are filtered out in the R file.
   This script is not optimized in any shape or form.
 
 * To tally all job posts, regardless of area, use "raw_jobs.sh" to generate a data file "raw_jobs.csv", which can be plotted via "raw_jobsgraph.r".
