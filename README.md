@@ -3,7 +3,7 @@ LingList posts tally.
 
 Analysis of the LingLite posts at http://listserv.linguistlist.org/pipermail/linglite/ (which must be downloaded and decompressed into an /email folder)
 
-* Tally job posts per area
+* Tally (Professor or Postdoc) job posts per area
 
   Most job posts mention multiple specializations (e.g. Phonetics/Phonology, or Syntax/Semantics, or Computational [field]), which means that the jobs tallied here the number of opportunities from applicants' perspective, which are inflated relative to the true number of job positions.
   
@@ -11,7 +11,7 @@ Analysis of the LingLite posts at http://listserv.linguistlist.org/pipermail/lin
   The "script.py" file generates "jobs.csv", which can be analyzed and plotted via "jobsgraph.r"
 
 
-* Tall raw job posts 
+* Tall all job posts, regardless of area 
   The Bash code "raw_jobs.sh" extracts raw job post tallies, per year, avoiding the inflation described above. This creates "raw_jobs.csv" and can be plotted via "raw_jobsgraph.r".
 
 All R code by Rui Chaves.
