@@ -11,16 +11,20 @@ j <- read.delim("jobs.csv", sep = ",")
 levels(j$Area) <- c("CompLing","CompLing","Documentation","ForensicLing","HistoricalLing","Morphology","Neurolinguistics","Phonetics","Phonology","Pragmatics","Psycholinguistics","Semantics","Sociolinguistics","Syntax","Typology","Applied")
 
 
+head(j)
+
+
 #########################################################################################
 # Overall jobs by area, regardless of year
 
 jto <- as.data.frame(aggregate(j$Jobs~j$Area, FUN=sum))
 colnames(jto) <- c("Area","Jobs") 
-jto$Area = with(jto, reorder(Area,Jobs,sum))
 
 # View table
-jto
+jto %>% arrange(-Jobs)
 
+# Sort by Area
+jto$Area = with(jto, reorder(Area,-Jobs,sum))
 
 # Plot description
 desc <- "Job postings at https://linguistlist.org"
