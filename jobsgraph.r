@@ -104,22 +104,3 @@ ggplot(jt, aes(x = Year,y = Jobs, group = Area, color=Area)) +
 
 
 
-##############################################################################
-# Jobs across years, regardless of area
-    
-jtt <- as.data.frame(aggregate(j$Jobs~j$Year, FUN=sum))
-colnames(jtt) <- c("Year","Jobs") 
-years <- unique(jtt$Year)
-
-
-ggplot(jtt, aes(x = Year,y = Jobs)) + 
-  geom_point(lwd = 2) + 
-  geom_line() +
-  #geom_histogram(stat = "identity") +
-  labs(title = "Job postings at https://linguistlist.org") +             
-  theme_bw() +
-  ylab("Job posts") +
-  theme(legend.title=element_blank(),legend.position = "none",
-        panel.background = element_rect(fill = "white")) +
-  scale_x_continuous(labels=as.character(years),breaks=years)
-
