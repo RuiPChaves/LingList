@@ -1,18 +1,14 @@
 # LingList
-LingList posts tally.
+To plot and tally LingList posts, download the data at http://listserv.linguistlist.org/pipermail/linglite/ and decompressed it into an /email folder.
 
-Analysis of the LingLite posts at http://listserv.linguistlist.org/pipermail/linglite/ (which must be downloaded and decompressed into an /email folder)
+* To tally (Professor or Postdoc) job posts per area use "script.py" to generate a data file "jobs.csv", which can be plotted via "jobsgraph.r".
 
-* Tally (Professor or Postdoc) job posts per area
-
-  Most job posts mention multiple specializations (e.g. Phonetics/Phonology, or Syntax/Semantics, or Computational [field]), which means that the jobs tallied here the number of opportunities from applicants' perspective, which are inflated relative to the true number of job positions.
+  Note: most job posts mention multiple specializations (e.g. Phonetics/Phonology, or Syntax/Semantics, or Computational [field]), which means that the jobs tallied here the number of opportunities from applicants' perspective, which are inflated relative to the true number of job positions.
   
-  Python code "script.py" was orginally written by Tom Juzek (http://tsjuzek.com/blog/jobs_in_linguistics.html) for Python 2 (2017), later adapted to Python 3 and expanded by Rui Chaves (2019-2021). By default, the script counts only positions that mention "Professor". To perform other searches, code must be edited (edit line 9). 
+  This Python code was orginally written by Tom Juzek (http://tsjuzek.com/blog/jobs_in_linguistics.html) for Python 2 (2017), and later adapted to Python 3 and expanded by Rui Chaves (2019-2021). All R code by Rui Chaves. 
+  
+  By default, the script counts only positions that mention "Professor". To perform other searches, code must be edited (edit line 9). There are too many categories for colour-blind compatible palletes to handle, and therefore the areas with the least job posts are filtered out in the R file.
   This script is not optimized in any shape or form.
-  After running "script.py", a data file "jobs.csv" is generated, which can be plotted via "jobsgraph.r". There are too many categories for colour-blind compatible palletes to handle, and therefore the areas with the least job posts are filtered out in the R file.
 
-
-* Tall all job posts, regardless of area 
-  The Bash code "raw_jobs.sh" extracts raw job post tallies, per year, avoiding the inflation described above. This creates "raw_jobs.csv" and can be plotted via "raw_jobsgraph.r".
-
-All R code by Rui Chaves. 
+* To tally all job posts, regardless of area, use "raw_jobs.sh" to generate a data file "raw_jobs.csv", which can be plotted via "raw_jobsgraph.r".
+  The Bash code "raw_jobs.sh" extracts raw job post tallies, per year, avoiding the inflation described above
