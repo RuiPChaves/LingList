@@ -21,16 +21,20 @@ jto$Area = with(jto, reorder(Area,Jobs,sum))
 # View table
 jto
 
+
+# Plot description
+desc <- "Job postings at https://linguistlist.org"
+
 # Bar plot
 ggplot(jto, aes(x = Area,y = Jobs, group = Area, fill = factor(Area))) + 
   geom_histogram(stat="identity", color = "#000000",size=0.3) + 
-  ylab("Job posts") +
-  labs(title = "Job postings at https://linguistlist.org, per specialization area") +             
+  ylab("Job posts per area") +
+  labs(title = desc) +             
   theme_bw(base_size=14) +
   theme(legend.title=element_blank(),legend.position = "none",
         panel.background = element_rect(fill = "white")) 
 
-# Pie plot 
+# Pie plot  (WCAG package can't be used because it only handles up to 12 colors)
 ggplot(jto, aes(x="", y=Jobs, fill=Area)) +
   theme_bw(base_size=14) +
 #  scale_fill_carto_d(name = "Area: ", palette = "Safe") +
@@ -43,7 +47,7 @@ ggplot(jto, aes(x="", y=Jobs, fill=Area)) +
 ################################################################
 # To improve plot legibility (WCAG package can't handle more than 12 colors), some areas can be are removed
 
-# Historical has only 31 jobs (1997-2021) so, it is removed
+# Historical, Forensic, and Applied have the fewest jobs, so they are removed.
 j <- j[!(j$Area=="HistoricalLing"),]
 
 # Forensic linguistics 
@@ -58,7 +62,7 @@ j$Area <- factor(j$Area)
 #########################################################################
 # Factor year
 
-# Not many jobs were posted in the 90's, so these years are removed
+# Not many jobs were posted at the LL website in the 90s, so these years are removed
 j <- j %>% filter(Year >= 2000)
 
 jt <- as.data.frame(aggregate(j$Jobs~j$Year + j$Area, FUN=sum))
@@ -67,9 +71,9 @@ jt$Year <- factor(jt$Year)
 
 ggplot(jt, aes(x = Year, y = Jobs, group = Area, fill = factor(Area))) + 
      geom_histogram(stat="identity", color = "#000000",size=0.3) + 
-      ylab("Job posts") +
+     ylab("Job posts per area") +
       xlab("") +
-      labs(title = "Job postings at https://linguistlist.org, per specialization area") +             
+      labs(title = desc) +
       theme_bw(base_size=14) +
       #scale_fill_colorblind(8) +
       scale_fill_carto_d(name = "Area: ", palette = "Safe") +
@@ -80,9 +84,9 @@ ggplot(jt, aes(x = Year, y = Jobs, group = Area, fill = factor(Area))) +
 # Stacked, percentages 
 ggplot(j, aes(x = factor(Year), y=  Jobs, fill = factor(Area))) + 
   geom_bar(position="fill", stat="identity",  size=0.3) + 
-  ylab("Job posts") +
+  ylab("Job posts per area") +
   xlab("") +
-  labs(title = "Prof job postings at https://linguistlist.org, per specialization area") +             
+  labs(title = desc) +
   theme_bw(base_size=14) +
   scale_fill_carto_d(name = "Area: ", palette = "Safe") +
   theme(legend.title=element_blank(),legend.position = "right",
@@ -92,10 +96,7 @@ ggplot(j, aes(x = factor(Year), y=  Jobs, fill = factor(Area))) +
 ggplot(jt, aes(x = Year,y = Jobs, group = Area, color=Area)) + 
   geom_point(lwd = 2) + 
   geom_line() +
-  labs(title = "Job postings at https://linguistlist.org") +             
+  labs(title = desc) +
   theme_bw() +
   scale_color_carto_d(name = "Area: ", palette = "Safe") +
-  ylab("Job posts") 
-
-
-
+  ylab("Job posts per area") 
