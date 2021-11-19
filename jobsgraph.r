@@ -1,4 +1,7 @@
+# Clear memory buffer
 rm(list=ls())
+
+# Load libraries
 library(ggplot2)
 library(ggthemes)
 library(rcartocolor)
@@ -7,11 +10,18 @@ library(dplyr)
 # Load data
 j <- read.delim("jobs.csv", sep = ",")
 
-# Normalize area names (some areas have more than one form)
-levels(j$Area) <- c("CompLing","CompLing","Documentation","ForensicLing","HistoricalLing","Morphology","Neurolinguistics","Phonetics","Phonology","Pragmatics","Psycholinguistics","Semantics","Sociolinguistics","Syntax","Typology","Applied")
 
+#levels(j$Area)
+# Normalize area names ("Comp Ling" / "Computational Linguistics" / "Natural Language Processing")
+levels(j$Area)[1] <- "CompLing"
+levels(j$Area)[2] <- "CompLing"
+levels(j$Area)[6] <- "CompLing"
 
-head(j)
+# A(c)quisition
+levels(j$Area)[11] <- "Acquisition"
+
+# Socio
+levels(j$Area)[13] <- "SocioLing"
 
 
 #########################################################################################
@@ -32,7 +42,7 @@ desc <- "Job postings at https://linguistlist.org"
 # Bar plot
 ggplot(jto, aes(x = Area,y = Jobs, group = Area, fill = factor(Area))) + 
   geom_histogram(stat="identity", color = "#000000",size=0.3) + 
-  ylab("Job posts per area") +
+  ylab("Job posts") +
   labs(title = desc) +             
   theme_bw(base_size=14) +
   theme(legend.title=element_blank(),legend.position = "none",
@@ -51,14 +61,9 @@ ggplot(jto, aes(x="", y=Jobs, fill=Area)) +
 ################################################################
 # To improve plot legibility (WCAG package can't handle more than 12 colors), some areas can be are removed
 
-# Historical, Forensic, and Applied have the fewest jobs, so they are removed.
-j <- j[!(j$Area=="HistoricalLing"),]
 
-# Forensic linguistics 
-j <- j[!(j$Area=="ForensicLing"),]
-
-# Applied linguistics 
-j <- j[!(j$Area=="Applied"),]
+# Forensic, Typology, and Documentation have the lowest overall counts ( < 70 )
+j <- j[!(j$Area %in% c("Forensic","Typology","Documentation","Acquisition")),]
 
 j$Area <- factor(j$Area) 
 
@@ -75,11 +80,13 @@ jt$Year <- factor(jt$Year)
 
 ggplot(jt, aes(x = Year, y = Jobs, group = Area, fill = factor(Area))) + 
      geom_histogram(stat="identity", color = "#000000",size=0.3) + 
-     ylab("Job posts per area") +
+     ylab("Job posts") +
       xlab("") +
       labs(title = desc) +
       theme_bw(base_size=14) +
+      #    This can only handle 8 levels
       #scale_fill_colorblind(8) +
+      #     This can only handle 13 levels
       scale_fill_carto_d(name = "Area: ", palette = "Safe") +
       theme(legend.title=element_blank(),legend.position = "right",
               panel.background = element_rect(fill = "white")) 
@@ -88,10 +95,11 @@ ggplot(jt, aes(x = Year, y = Jobs, group = Area, fill = factor(Area))) +
 # Stacked, percentages 
 ggplot(j, aes(x = factor(Year), y=  Jobs, fill = factor(Area))) + 
   geom_bar(position="fill", stat="identity",  size=0.3) + 
-  ylab("Job posts per area") +
+  ylab("Job posts percentage") +
   xlab("") +
   labs(title = desc) +
   theme_bw(base_size=14) +
+  #    This can only handle 12 levels
   scale_fill_carto_d(name = "Area: ", palette = "Safe") +
   theme(legend.title=element_blank(),legend.position = "right",
         panel.background = element_rect(fill = "white")) 
@@ -102,5 +110,6 @@ ggplot(jt, aes(x = Year,y = Jobs, group = Area, color=Area)) +
   geom_line() +
   labs(title = desc) +
   theme_bw() +
-  scale_color_carto_d(name = "Area: ", palette = "Safe") +
+  #   This can only handle 12 levels
+   scale_color_carto_d(name = "Area: ", palette = "Safe") +
   ylab("Job posts per area") 

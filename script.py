@@ -5,16 +5,20 @@ import os
 path = 'emails/'
 
 ##################### Select your search type ########################
-# Search for 'Professor' jobs
-pattern2 = re.compile(r'[pP]rof(essor)?')
+# Search for 'Professor' jobs (some rare posts mention "open-rank" but not "Professor", others use "Faculty" instead)
+pattern2 = re.compile(r'([pP]rof(essor)?)|([Oo]pen(-)?[rR]ank)|(Faculty (at|[Pp]osition))|(Faculty[[:punct:]])')
 
 # Search for 'Postoc' jobs
 #pattern2 = re.compile(r'\b[pP]ost ?[Dd]oc')
 ######################################################################
 
+
+
+
 month_list = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]   
 year_list = [str(m) for m in range(1997,2022)]
-areas = ["Syntax","Semantics","Morphology","Phonetics","Phonology","Socio","Pragmatics","Comp Ling","Computational","Psycholing","Typology","Documentation", "Neuroling","Historical","Forensic","Applied"]
+areas = ["Syntax","Semantics","Morphology","Phonetics","Phonology","Socio","Pragmatics","Comp Ling","Computational","Natural Language Processing","Psycholing","Typology","Documentation", "Neuroling","Historical","Forensic","quisition"]
+# Both "Acquisition" and "Aquisition" appear in posts
 
 pattern = re.compile('^[0-9]+')
 matching_files = [f for f in os.listdir('emails/') if pattern.match(f)]
