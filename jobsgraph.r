@@ -48,25 +48,12 @@ ggplot(jto, aes(x = Area,y = Jobs, group = Area, fill = factor(Area))) +
   theme(legend.title=element_blank(),legend.position = "none",
         panel.background = element_rect(fill = "white")) 
 
-# Pie plot  (WCAG package can't be used because it only handles up to 12 colors)
-ggplot(jto, aes(x="", y=Jobs, fill=Area)) +
-  theme_bw(base_size=14) +
-#  scale_fill_carto_d(name = "Area: ", palette = "Safe") +
-  geom_bar(width = 1, stat = "identity") +
-  coord_polar("y", start=0) +
-  theme(axis.title.y=element_blank(), axis.text.y=element_blank(), axis.ticks.y=element_blank()) 
-
-
-
 ################################################################
-# To improve plot legibility (WCAG package can't handle more than 12 colors), some areas can be are removed
-
-
-# Forensic, Typology, and Documentation have the lowest overall counts ( < 70 )
+# To improve plot legibility (WCAG package can't handle more than 12 colors), some areas can be are removed.
+# Forensic, Typology, and Documentation have the lowest overall counts ( < 70 ).
 j <- j[!(j$Area %in% c("Forensic","Typology","Documentation","Acquisition")),]
 
 j$Area <- factor(j$Area) 
-
 
 #########################################################################
 # Factor year
@@ -113,3 +100,4 @@ ggplot(jt, aes(x = Year,y = Jobs, group = Area, color=Area)) +
   #   This can only handle 12 levels
    scale_color_carto_d(name = "Area: ", palette = "Safe") +
   ylab("Job posts per area") 
+
