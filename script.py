@@ -2,17 +2,36 @@
 # Adapted and revised to Python3 by Rui Chaves 
 import re
 import os
+import sys
 path = 'emails/'
 
-##################### Select your search type ########################
-# Search for 'Professor' jobs (some rare posts mention "open-rank" but not "Professor", others use "Faculty" instead)
-pattern2 = re.compile(r'([pP]rof(essor)?)|([Oo]pen(-)?[rR]ank)|(Faculty (at|[Pp]osition))|(Faculty[[:punct:]])')
+#########################################################
+print('Arguments: 0 (Professor, default), 1 (Postdoc), or 2 (General).')
 
-# Search for 'Postoc' jobs
-#pattern2 = re.compile(r'\b[pP]ost ?[Dd]oc')
+
+try:
+    case = int(sys.argv[1])
+except:
+    case = 0
+
+##################### search type ########################
+
+# Search for 'Professor' jobs (some rare posts mention "open-rank" but 
+# not "Professor", while others use "Faculty" instead)
+if (case == 0):
+    print('Professor tally')
+    pattern2 = re.compile(r'([pP]rof(essor)?)|([Oo]pen(-)?[rR]ank)|(Faculty (at|[Pp]osition))|(Faculty[[:punct:]])')
+
+# Search for 'Postoc' jobs 
+elif (case == 1):
+    print('PostDoc tally')
+    pattern2 = re.compile(r'\b[pP]ost ?[Dd]oc')
+
+# Search for any jobs regardless of rank
+elif (case == 2):
+    print('General tally')
+    pattern2 = re.compile(r' ')
 ######################################################################
-
-
 
 
 month_list = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]   
