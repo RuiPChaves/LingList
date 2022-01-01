@@ -11,4 +11,4 @@ There are too many categories for colour-blind compatible palletes to handle, an
   
 
 * To tally all job posts, regardless of area, use "raw_jobs.sh" to generate a data file "raw_jobs.csv", which can be plotted via "raw_jobsgraph.r".
-  The Bash code "raw_jobs.sh" extracts raw job post tallies, per year, avoiding the inflation described above
+  The Bash code "raw_jobs.sh" extracts raw job post tallies, per year, avoiding the inflation described above.
