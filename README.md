@@ -1,7 +1,7 @@
 # LingList
 To plot and tally LingList posts, download the data at http://listserv.linguistlist.org/pipermail/linglite/, decompress it to a folder named /email, run the python script, and run the R file.
 
-Python code was orginally written by Tom Juzek (http://tsjuzek.com/blog/jobs_in_linguistics.html) for Python 2 (2017), and later adapted to Python 3 and expanded by Rui Chaves (2019-2021). All R code by Rui Chaves. 
+Python code was orginally written by Tom Juzek (http://tsjuzek.com/blog/jobs_in_linguistics.html) in 2017 for Python 2, and later adapted to Python 3 and expanded by Rui Chaves (2019-2021). All R code by Rui Chaves. 
 
 * To tally (Professor or Postdoc) job posts per area use "script.py" to generate a data file "jobs.csv", which can be plotted via "jobsgraph.r".
   This script is not optimized in any shape or form.
