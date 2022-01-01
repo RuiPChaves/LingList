@@ -1,5 +1,5 @@
 # LingList
-To plot and tally LingList posts, download the data at http://listserv.linguistlist.org/pipermail/linglite/ and decompressed it into an /email folder.
+To plot and tally LingList posts, download the data at http://listserv.linguistlist.org/pipermail/linglite/ and decompress it to a folder named /email.
 
 Python code was orginally written by Tom Juzek (http://tsjuzek.com/blog/jobs_in_linguistics.html) for Python 2 (2017), and later adapted to Python 3 and expanded by Rui Chaves (2019-2021). All R code by Rui Chaves. 
 
