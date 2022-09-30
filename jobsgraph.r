@@ -10,8 +10,11 @@ library(dplyr)
 # Load data
 j <- read.delim("jobs.csv", sep = ",")
 
+j$Month <- factor(j$Month)
+j$Area <- factor(j$Area)
+j$Year <- factor(j$Year)
+j$Jobs <- as.numeric(j$Jobs)
 
-#levels(j$Area)
 # Normalize area names ("Comp Ling" / "Computational Linguistics" / "Natural Language Processing")
 levels(j$Area)[1] <- "CompLing"
 levels(j$Area)[2] <- "CompLing"
@@ -37,20 +40,24 @@ jto %>% arrange(-Jobs)
 jto$Area = with(jto, reorder(Area,-Jobs,sum))
 
 # Plot description
-desc <- "Job postings at https://linguistlist.org"
+#desc <- "'PostDoc' Job postings at https://linguistlist.org"
+#desc <- "Overall Job postings at https://linguistlist.org"
+desc <- "'Professor' Job postings at https://linguistlist.org"
 
 # Bar plot
-ggplot(jto, aes(x = Area,y = Jobs, group = Area, fill = factor(Area))) + 
+ggplot(jto, aes(x = reorder(Area, Jobs),y = Jobs, group = Area, fill = factor(Area))) + 
   geom_histogram(stat="identity", color = "#000000",size=0.3) + 
   ylab("Job posts") +
   labs(title = desc) +             
   theme_bw(base_size=14) +
+   coord_flip() +
   theme(legend.title=element_blank(),legend.position = "none",
         panel.background = element_rect(fill = "white")) 
 
 ################################################################
 # To improve plot legibility (WCAG package can't handle more than 12 colors), some areas can be are removed.
-# Forensic, Typology, and Documentation have the lowest overall counts ( < 70 ).
+# Forensic, Typology, and Documentation are removed because they have the lowest overall counts ( < 70 ).
+# Acquisition posts often conflate language teaching (e.g. TESOL/TEFL/ELT) with Acquisition research.
 j <- j[!(j$Area %in% c("Forensic","Typology","Documentation","Acquisition")),]
 
 j$Area <- factor(j$Area) 
@@ -90,6 +97,7 @@ ggplot(j, aes(x = factor(Year), y=  Jobs, fill = factor(Area))) +
   scale_fill_carto_d(name = "Area: ", palette = "Safe") +
   theme(legend.title=element_blank(),legend.position = "right",
         panel.background = element_rect(fill = "white")) 
+
 
 # Line plot (not very legible)
 ggplot(jt, aes(x = Year,y = Jobs, group = Area, color=Area)) + 
