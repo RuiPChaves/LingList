@@ -12,7 +12,7 @@ j <- read.delim("jobs.csv", sep = ",")
 
 j$Month <- factor(j$Month)
 j$Area <- factor(j$Area)
-j$Year <- factor(j$Year)
+j$Year <- as.numeric(j$Year)
 j$Jobs <- as.numeric(j$Jobs)
 
 # Normalize area names ("Comp Ling" / "Computational Linguistics" / "Natural Language Processing")
@@ -36,34 +36,37 @@ colnames(jto) <- c("Area","Jobs")
 # View table
 jto %>% arrange(-Jobs)
 
-# Sort by Area
-jto$Area = with(jto, reorder(Area,-Jobs,sum))
 
 # Plot description
+desc <- "'Professor' Job postings at https://linguistlist.org"
 #desc <- "'PostDoc' Job postings at https://linguistlist.org"
 #desc <- "Overall Job postings at https://linguistlist.org"
-desc <- "'Professor' Job postings at https://linguistlist.org"
+
+
 
 # Bar plot
 ggplot(jto, aes(x = reorder(Area, Jobs),y = Jobs, group = Area, fill = factor(Area))) + 
   geom_histogram(stat="identity", color = "#000000",size=0.3) + 
   ylab("Job posts") +
+  xlab("Job area") +
   labs(title = desc) +             
   theme_bw(base_size=14) +
    coord_flip() +
   theme(legend.title=element_blank(),legend.position = "none",
         panel.background = element_rect(fill = "white")) 
 
+
+
 ################################################################
 # To improve plot legibility (WCAG package can't handle more than 12 colors), some areas can be are removed.
 # Forensic, Typology, and Documentation are removed because they have the lowest overall counts ( < 70 ).
 # Acquisition posts often conflate language teaching (e.g. TESOL/TEFL/ELT) with Acquisition research.
+
 j <- j[!(j$Area %in% c("Forensic","Typology","Documentation","Acquisition")),]
 
 j$Area <- factor(j$Area) 
 
 #########################################################################
-# Factor year
 
 # Not many jobs were posted at the LL website in the 90s, so these years are removed
 j <- j %>% filter(Year >= 2000)
@@ -108,4 +111,29 @@ ggplot(jt, aes(x = Year,y = Jobs, group = Area, color=Area)) +
   #   This can only handle 12 levels
    scale_color_carto_d(name = "Area: ", palette = "Safe") +
   ylab("Job posts per area") 
+
+
+
+# Last year only
+# j <- j %>% filter(Year == max(Year))
+
+# Last 12 years
+j <- j %>% filter(Year >= (max(Year)-11))
+jt <- as.data.frame(aggregate(j$Jobs~j$Area+j$Year, FUN=sum))
+colnames(jt) <- c("Area","Year","Jobs") 
+
+
+# Bar plot
+ggplot(jt, aes(x = reorder(Area, Jobs),y = Jobs, group = Area, fill = factor(Area), color = factor(Area))) + 
+  geom_histogram(stat="identity", color = "#000000",size=0.3) + 
+  ylab("Job posts") +
+  xlab("Areas") +
+  labs(title = desc) +             
+  theme_bw(base_size=14) +
+  coord_flip() +
+  facet_wrap( ~ Year) + 
+  theme(legend.title=element_blank(),legend.position = "none",
+        panel.background = element_rect(fill = "white")) 
+
+
 
