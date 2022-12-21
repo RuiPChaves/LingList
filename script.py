@@ -16,12 +16,11 @@ except:
 
 ##################### search type ########################
 
-# Search for 'Professor' jobs (some rare posts mention "open-rank" but 
-# not "Professor", while others use "Faculty" instead)
+# Search for 'Professor' jobs (some rare posts mention "open-rank" but not "Professor", 
+# while others use "Faculty" instead), and tiny minority in the single digits uses "Professeure"
 if (case == 0):
     print('Professor tally')
-    pattern2 = re.compile(r'prof(essor)?|open-?rank|faculty (at|position)|faculty[:punct:]',re.I)
-
+    pattern2 = re.compile(r'prof(ess(or|eure))?|open-?rank|faculty (at|position)|faculty[:punct:]',re.I)
 
 # Search for 'Postoc' jobs 
 elif (case == 1):
