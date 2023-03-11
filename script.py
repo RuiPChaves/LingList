@@ -60,6 +60,6 @@ for area in areas:
                             if ((area.lower() in line.lower()) and re.search(pattern2,line)):
                                 counter += 1
                     input_file.close()
-            output_file.write(str(counter) + "," + month + "," + year + "," + area + "\n")
+            output_file.write(str(counter) + "," + month[0:3] + "," + year + "," + area + "\n")
 
 output_file.close()

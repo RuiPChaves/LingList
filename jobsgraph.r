@@ -7,8 +7,22 @@ library(ggthemes)
 library(rcartocolor)
 library(dplyr)
 
-# Load data
-j <- read.delim("jobs.csv", sep = ",")
+###################################################################
+# Load data (pick which dataset to load)
+###################################################################
+
+desc <- "'Professor' Job postings at https://linguistlist.org"
+j <- read.delim("jobs0.csv", sep = ",")
+
+#desc <- "'PostDoc' Job postings at https://linguistlist.org"
+#j <- read.delim("jobs1.csv", sep = ",")
+
+#desc <- "Overall Job postings at https://linguistlist.org"
+#j <- read.delim("jobs2.csv", sep = ",")
+
+###################################################################
+
+
 
 j$Month <- factor(j$Month)
 j$Area <- factor(j$Area)
@@ -26,6 +40,8 @@ levels(j$Area)[11] <- "Acquisition"
 # Socio
 levels(j$Area)[13] <- "SocioLing"
 
+j$Area <- factor(j$Area)
+
 
 #########################################################################################
 # Overall jobs by area, regardless of year
@@ -35,13 +51,6 @@ colnames(jto) <- c("Area","Jobs")
 
 # View table
 jto %>% arrange(-Jobs)
-
-
-# Plot description
-desc <- "'Professor' Job postings at https://linguistlist.org"
-#desc <- "'PostDoc' Job postings at https://linguistlist.org"
-#desc <- "Overall Job postings at https://linguistlist.org"
-
 
 
 # Bar plot
@@ -114,8 +123,6 @@ ggplot(jt, aes(x = Year,y = Jobs, group = Area, color=Area)) +
 
 
 
-# Last year only
-# j <- j %>% filter(Year == max(Year))
 
 # Last 12 years
 j <- j %>% filter(Year >= (max(Year)-11))
@@ -135,5 +142,33 @@ ggplot(jt, aes(x = reorder(Area, Jobs),y = Jobs, group = Area, fill = factor(Are
   theme(legend.title=element_blank(),legend.position = "none",
         panel.background = element_rect(fill = "white")) 
 
+
+
+
+
+
+# Order months
+j$Month <- factor(j$Month, levels = month.abb)
+
+head(j)
+
+# Fuse variants into the same line
+jm <- as.data.frame(aggregate(j$Jobs~j$Area + j$Month + j$Year, FUN=sum))
+colnames(jm) <- c("Area","Month","Year","Jobs") 
+
+jm <- jm[!(jm$Area %in% c("Forensic","Typology","Documentation","Acquisition")),]
+jm <- jm %>% filter(Year > max(jm$Year) -6)
+
+
+ggplot(jm, aes(x = Month, y = Jobs, group = Area, fill = factor(Area))) + 
+  geom_histogram(stat="identity", color = "#000000",size=0.3) + 
+  ylab("Job posts") +
+  xlab("") +
+  labs(title = paste(desc)) +
+  theme_bw(base_size=14) +
+  facet_wrap( ~ Year) + 
+  scale_fill_carto_d(name = "Area: ", palette = "Safe") +
+  theme(legend.title=element_blank(),legend.position = "right",
+        panel.background = element_rect(fill = "white")) 
 
 
