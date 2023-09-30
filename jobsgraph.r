@@ -6,6 +6,7 @@ library(ggplot2)
 library(ggthemes)
 library(rcartocolor)
 library(dplyr)
+library(broom)
 
 ###################################################################
 # Load data (pick which dataset to load)
@@ -53,7 +54,7 @@ colnames(jto) <- c("Area","Jobs")
 jto %>% arrange(-Jobs)
 
 
-# Bar plot
+# Bar plot jobs vs area
 ggplot(jto, aes(x = reorder(Area, Jobs),y = Jobs, group = Area, fill = factor(Area))) + 
   geom_histogram(stat="identity", color = "#000000",size=0.3) + 
   ylab("Job posts") +
@@ -65,6 +66,26 @@ ggplot(jto, aes(x = reorder(Area, Jobs),y = Jobs, group = Area, fill = factor(Ar
         panel.background = element_rect(fill = "white")) 
 
 
+# Bar plot jobs vs area vs year (2000 forward)
+jtoy <- as.data.frame(aggregate(j$Jobs~j$Area + j$Year, FUN=sum))
+colnames(jtoy) <- c("Area","Year","Jobs") 
+jtoy <- jtoy %>% filter(Year >= 2000)
+
+ggplot(jtoy, aes(x = Year, y = Jobs, group = Area, fill = factor(Area))) + 
+  geom_histogram(stat="identity", color = "#000000",size=0.3) + 
+  ylab("Job posts") +
+  xlab("") +
+  labs(title = desc) +
+  theme_bw(base_size=14) +
+  #    This can only handle 8 levels
+  #scale_fill_colorblind(8) +
+  #     This can only handle 13 levels
+  #scale_fill_carto_d(name = "Area: ", palette = "Safe") +
+  theme(legend.title=element_blank(),legend.position = "right",
+        panel.background = element_rect(fill = "white")) 
+
+
+
 
 ################################################################
 # To improve plot legibility (WCAG package can't handle more than 12 colors), some areas can be are removed.
@@ -72,10 +93,7 @@ ggplot(jto, aes(x = reorder(Area, Jobs),y = Jobs, group = Area, fill = factor(Ar
 # Acquisition posts often conflate language teaching (e.g. TESOL/TEFL/ELT) with Acquisition research.
 
 j <- j[!(j$Area %in% c("Forensic","Typology","Documentation","Acquisition")),]
-
 j$Area <- factor(j$Area) 
-
-#########################################################################
 
 # Not many jobs were posted at the LL website in the 90s, so these years are removed
 j <- j %>% filter(Year >= 2000)
@@ -111,22 +129,30 @@ ggplot(j, aes(x = factor(Year), y=  Jobs, fill = factor(Area))) +
         panel.background = element_rect(fill = "white")) 
 
 
-# Line plot (not very legible)
+# A regression line plot
 ggplot(jt, aes(x = Year,y = Jobs, group = Area, color=Area)) + 
   geom_point(lwd = 2) + 
-  geom_line() +
+  geom_smooth(method='lm', formula = 'y ~ x', se = FALSE) +
   labs(title = desc) +
   theme_bw() +
-  #   This can only handle 12 levels
-   scale_color_carto_d(name = "Area: ", palette = "Safe") +
+  scale_color_carto_d(name = "Area: ", palette = "Safe") +
+  ylab("Job posts per area") 
+
+# A loess line plot
+ggplot(jt, aes(x = Year,y = Jobs, group = Area, color=Area)) + 
+  geom_point(lwd = 2) + 
+  geom_smooth(method='loess', formula = 'y ~ x', se = FALSE) +
+  labs(title = desc) +
+  theme_bw() +
+  scale_color_carto_d(name = "Area: ", palette = "Safe") +
   ylab("Job posts per area") 
 
 
-
+#############################################################
 
 # Last 12 years
-j <- j %>% filter(Year >= (max(Year)-11))
-jt <- as.data.frame(aggregate(j$Jobs~j$Area+j$Year, FUN=sum))
+j12 <- j %>% filter(Year >= (max(Year)-11))
+jt <- as.data.frame(aggregate(j12$Jobs~j12$Area+j12$Year, FUN=sum))
 colnames(jt) <- c("Area","Year","Jobs") 
 
 
@@ -143,10 +169,76 @@ ggplot(jt, aes(x = reorder(Area, Jobs),y = Jobs, group = Area, fill = factor(Are
         panel.background = element_rect(fill = "white")) 
 
 
+# A regression plot
+ggplot(jt, aes(x = Year,y = Jobs, group = Area, color=Area)) + 
+  geom_point(lwd = 2) + 
+  geom_smooth(method='lm', formula = 'y ~ x', se = FALSE) +
+labs(title = desc) +
+  theme_bw() +
+  scale_color_carto_d(name = "Area: ", palette = "Safe") +
+  ylab("Job posts per area") 
+
+# A loess plot
+ggplot(jt, aes(x = Year,y = Jobs, group = Area, color=Area)) + 
+  geom_point(lwd = 2) + 
+  geom_smooth(method='loess', formula = 'y ~ x', se = FALSE) +
+  labs(title = desc) +
+  theme_bw() +
+  scale_color_carto_d(name = "Area: ", palette = "Safe") +
+  ylab("Job posts per area") 
 
 
 
 
+
+# Trends
+###################################################################
+
+j <- j %>% filter(Year >= (max(Year)-20))
+
+jt <- as.data.frame(aggregate(j$Jobs~j$Area+j$Year, FUN=sum))
+colnames(jt) <- c("Area","Year","Jobs") 
+
+# Proportions
+jtg <- jt %>% group_by(Year) %>% 
+             mutate(Proportion = Jobs / sum(Jobs)) %>%
+             ungroup()
+
+ggplot(jtg, aes(x = Year,y = Proportion, group = Area, color=Area)) + 
+  geom_point(lwd = 2) + 
+  geom_smooth(method='lm', formula = 'y ~ x', se = FALSE) +
+  #geom_smooth(method='loess', formula = 'y ~ x', se = FALSE) +
+  labs(title = desc) +
+  theme_bw() +
+  scale_color_carto_d(name = "Area: ", palette = "Safe") +
+  ylab("Job posts per area") 
+
+
+# Regressions
+################
+split_data <- split(jtg, jtg$Area)
+regressions <- list()
+
+# Run regressions for each subset
+for (level in names(split_data)) {
+  subset <- split_data[[level]]
+  regressions[[level]] <- lm(Proportion ~ Year, data = subset)
+}
+
+# Extract coefficients and other information
+regression_data <- lapply(names(regressions), function(level) {
+  tidy_reg <- broom::tidy(regressions[[level]])
+  tidy_reg$level <- level
+  return(tidy_reg)
+})
+
+regression_table <- do.call(rbind, regression_data)
+print(regression_table, n= 30)
+
+
+
+
+############################################################
 # Order months
 j$Month <- factor(j$Month, levels = month.abb)
 
@@ -156,8 +248,12 @@ head(j)
 jm <- as.data.frame(aggregate(j$Jobs~j$Area + j$Month + j$Year, FUN=sum))
 colnames(jm) <- c("Area","Month","Year","Jobs") 
 
-jm <- jm[!(jm$Area %in% c("Forensic","Typology","Documentation","Acquisition")),]
-jm <- jm %>% filter(Year > max(jm$Year) -6)
+# Just last 9 years
+#jm <- jm %>% filter(Year > max(jm$Year) - 9)
+
+# Just last 20 years
+jm <- jm %>% filter(Year > max(jm$Year) - 20)
+
 
 
 ggplot(jm, aes(x = Month, y = Jobs, group = Area, fill = factor(Area))) + 
@@ -170,5 +266,7 @@ ggplot(jm, aes(x = Month, y = Jobs, group = Area, fill = factor(Area))) +
   scale_fill_carto_d(name = "Area: ", palette = "Safe") +
   theme(legend.title=element_blank(),legend.position = "right",
         panel.background = element_rect(fill = "white")) 
+
+
 
 
