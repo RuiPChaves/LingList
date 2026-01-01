@@ -20,7 +20,7 @@ except:
 # while others use "Faculty" instead), and tiny minority in the single digits uses "Professeure"
 if (case == 0):
     print('Professor tally')
-    pattern2 = re.compile(r'prof(ess(or|eure))?|open-?rank|faculty (at|position)|faculty[:punct:]',re.I)
+    pattern2 = re.compile(r'\bprof(ess(or(ship)?|eure))?|open-?rank|faculty (at|position)|faculty[:punct:]',re.I)
 
 # Search for 'Postoc' jobs 
 elif (case == 1):
@@ -35,7 +35,7 @@ elif (case == 2):
 
 
 month_list = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]   
-year_list = [str(m) for m in range(1997,2023)]
+year_list = [str(m) for m in range(1997,2026)]
 areas = ["Syntax","Semantics","Morphology","Phonetics","Phonology","Socio","Pragmatics","Comp Ling","Computational","Natural Language Processing","Psycholing","Typology","Documentation", "Neuroling","Historical","Forensic","quisition"]
 # Both "Acquisition" and "Aquisition" appear in posts
 
@@ -56,7 +56,8 @@ for area in areas:
                 if (email_month == month) and (email_year == year):
                     input_file = open(path + filename,"r",encoding = "ISO-8859-1")
                     for line in input_file:
-                        if "Jobs: " in line:                                    
+                        # 2 job posts in Sep23 aren't categorized as such, and had to be hand-corrected in the dataset 
+                        if "Jobs: " in line:                                                       
                             if ((area.lower() in line.lower()) and re.search(pattern2,line)):
                                 counter += 1
                     input_file.close()
